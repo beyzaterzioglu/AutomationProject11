@@ -1,0 +1,26 @@
+Created by beyza on 3.10.2025
+
+This is a concept file with following syntax for each concept.
+# Form sayfası açılır
+* "url" adresini aç.
+
+# State seçimi yapılır.
+* "StateDropdown" alanına tıklanır
+* "StateOptionUttarPradesh" alanına tıklanır ardından boşluğa tıklanır
+
+# City seçimi yapılır.
+* "CityDropdown" alanına tıklanır
+* "CityOptionNoida" alanına tıklanır ardından boşluğa tıklanır
+
+
+# Doğum tarihi seçilir
+* "dateOfBirth" alanına tıklanır
+* "monthSelect" alanına tıklanır
+* "monthOptionApril" alanına tıklanır
+* "yearSelect" alanına tıklanır ardından boşluğa tıklanır
+
+# Gelecekte olan bir doğum tarihi seçilir
+* "dateOfBirth" alanına tıklanır
+* "monthSelect" alanına tıklanır
+* "monthOptionApril" alanına tıklanır
+* "yearSelect" alanına tıklanır
