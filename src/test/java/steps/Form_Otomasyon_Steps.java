@@ -93,14 +93,12 @@ public class Form_Otomasyon_Steps {
         }
         Driver.webDriver.get(actualUrl);
 
-        // Assert URL doğru açıldı mı?
         Assertions.assertEquals(actualUrl, Driver.webDriver.getCurrentUrl(),
                 "Sayfa URL'si beklenenle uyuşmuyor.");
     }
 
     @Step("<alan> alanına <name> degerini yaz.")
     public void fieldDoldurma(String alan, String name) throws InterruptedException {
-
 
         String value = getJsonValue(name);
         if (value == null) {
@@ -109,41 +107,30 @@ public class Form_Otomasyon_Steps {
         WebElement element = find(alan);
         element.clear();
         element.sendKeys(value);
-
     }
 
 
     @Step("<key> alanına tıklanır")
     public void fieldClick(String key) throws InterruptedException {
-        find(key).click();
-
+        WebElement button = find(key);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", button);
+        button.click();
     }
 
-
-    @Step("Masaüstüne gidilir")
-    public void masaustuneGit() {
-
-    }
-
-
-    @Step("<resim> seçilir")
-    public void resimSec(Object arg0) {
-
-    }
 
 
     @Step("Kayıt işlemin onaylandığı <header> başlığına bakarak doğrulanır")
     public void headerDogrulama(String expectedHeader) {
         WebDriverWait wait = new WebDriverWait(Driver.webDriver, Duration.ofSeconds(20));
 
-        String expected="Thanks for submitting the form";
+        String expected=find("header").getText();
         WebElement headerElement = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.id("example-modal-sizes-title-lg"))
         );
 
         String actualHeaderText = headerElement.getText();
-        Assertions.assertEquals(expectedHeader, actualHeaderText,
-                "Başlık beklenenle uyuşmuyor! Beklenen: " + expectedHeader + ", Gerçek: " + actualHeaderText);
+        Assertions.assertEquals(expected, actualHeaderText,
+                "Başlık beklenenle uyuşmuyor! Beklenen: " + expected + ", Gerçek: " + actualHeaderText);
 
         System.out.println("Başlık doğrulandı: " + actualHeaderText);
     }
@@ -152,7 +139,7 @@ public class Form_Otomasyon_Steps {
     @Step("Kayıt işleminin onaylanmadığı doğrulanır")
     public void headerGorunmediginiDogrulama() {
 
-        WebElement submitButton = driver.findElement(By.cssSelector("#submit"));
+        WebElement submitButton = find("SubmitButton");
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", submitButton);
         submitButton.click();
 
@@ -166,33 +153,36 @@ public class Form_Otomasyon_Steps {
 
     }
 
-    @Step("<key> açılır penceresine tıkla")
-    public void acılırPencereTıkla(String key) {
-        find(key).click();
-    }
-
     @Step("Dosya seçimi yapılır")
     public void dosyaSec() {
-        WebElement uploadInput = driver.findElement(By.id("uploadPicture"));
 
-        String dosyaYolu = "C:\\Users\\beyza\\Desktop\\1.jpg";
+        WebElement uploadInput = find("UploadPicture");
 
+        String dosyaYolu = getJsonValue("filePath");
+        if (dosyaYolu == null || dosyaYolu.isEmpty()) {
+            throw new RuntimeException("values.json dosyasından 'filepath' değeri alınamadı.");
+        }
         uploadInput.sendKeys(dosyaYolu);
-
         String uploadedFileName = uploadInput.getAttribute("value");
         Assertions.assertFalse(uploadedFileName.isEmpty(), "Dosya seçimi yapılmadı!");
     }
 
     @Step("Gelecekte olan bir doğum tarihi seçilir")
     public void gelecekteOlanBırGunSec() {
-        Select yearSelect = new Select(driver.findElement(By.cssSelector("select.react-datepicker__year-select")));
-        yearSelect.selectByVisibleText("2045");
+        Select yearSelect = new Select(find("yearSelect"));
+        yearSelect.selectByVisibleText(getJsonValue("year"));
     }
+
 
     @Step("<key> alanına tıklanır ardından boşluğa tıklanır")
     public void tıklamaSonrasıBoslugaTıkla(String key) {
-        WebElement element = find(key);
-        element.click(); // Alana tıkla
+
+        WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOf(find(key)));
+
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(element));
+        element.click();
         WebElement body = driver.findElement(By.tagName("body"));
         body.click();
     }

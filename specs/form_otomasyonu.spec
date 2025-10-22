@@ -52,6 +52,7 @@ tags: form, pozitif
 * Form sayfası açılır
 * "EmailInput" alanına "email" degerini yaz.
 
+
 ## TC9 - Email alanına text yazmak
 tags: form
 * Form sayfası açılır
@@ -141,7 +142,6 @@ tags: form,negatif
 
 tags: form,negatif
 * Form sayfası açılır
-* "mobile" alanına tıklanır
 * "MobileNumber" alanına "longPhoneNumber" degerini yaz.
 
 ## TC26 - Mobile alanına 10 haneden az numara girmek
